@@ -7,6 +7,7 @@ http.createServer(function (req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       var oldpath = files.filetoupload.path;
+      ///file upload has been completed after the permission sudo chmod 777 given to the directory
       var newpath = '/home/ismayil/ismayildemo/Github/nodetree' + files.filetoupload.name;
       fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
