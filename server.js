@@ -1,50 +1,35 @@
 const express = require('express');
-const app = express();
-const morgan = require('morgan');
 const dotenv = require('dotenv');
-const bodyparser = require('body-parser');
+const morgan = require('morgan');
+const bodyparser = require("body-parser");
 const path = require('path');
 
+const connectDB = require('./server/database/connection');
 
+const app = express();
 
-dotenv.config({path:'config.env'});
-
+dotenv.config( { path : 'config.env'} )
 const PORT = process.env.PORT || 8080
 
-
-//for logging the request from the client to the server
+// log requests
 app.use(morgan('tiny'));
 
-app.use(bodyparser.urlencoded({extended:true}));
+// mongodb connection
+connectDB();
+
+// parse request to body-parser
+app.use(bodyparser.urlencoded({ extended : true}))
 
 // set view engine
+app.set("view engine", "ejs")
+//app.set("views", path.resolve(__dirname, "views/ejs"))
 
-app.set("view engine","ejs");
+// load assets
+app.use('/css', express.static(path.resolve(__dirname, "assets/css")))
+app.use('/img', express.static(path.resolve(__dirname, "assets/img")))
+app.use('/js', express.static(path.resolve(__dirname, "assets/js")))
 
-app.set('/views',express.static(path.resolve(__dirname,"views/index.ejs")))
-//for loading assets from the local project
+// load routers
+app.use('/', require('./server/routes/router'))
 
-app.use('/css',express.static(path.resolve(__dirname,"assets/css")))
-app.use('/js',express.static(path.resolve(__dirname,"assets/js")))
-app.use('/img',express.static(path.resolve(__dirname,"assets/img")))
-
-
-// app.get('/' , (req , res)=>{
-
-//    res.send('hello from simple server :)')
-
-// })
-
-app.get('/' ,(req , res)=>{
-
-    res.render(`index`)
- 
- })
-app.get('/testroute' , (req , res)=>{
-
-    res.send('hello from simple server - another route which was i created :)')
- 
- })
-app.listen(PORT,()=>{
-    console.log(`Server is running on http://localhost:${PORT}`)
-})
+app.listen(PORT, ()=> { console.log(`Server is running on http://localhost:${PORT}`)});
