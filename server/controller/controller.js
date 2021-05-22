@@ -137,5 +137,5 @@ exports.authUserCreate = (req,res)=>{
     res.status(500).send({
                     message :  "ok you are sending a response"
                 });
-console.log(req.body.name);
+console.log(req.body);
 }
