@@ -116,42 +116,56 @@ exports.authUserCreate =  (req,res)=>{
         return;
     }
 
-
-    // const authUser = new authUserdb();
-// const salt =   bcrypt.genSalt(10);
-
 console.log(req.body.name)
 console.log(req.body.password)
-// authUser.name = req.body.name
-// authUser.password =   bcrypt.hash(req.body.password,salt)
 
-// console.log(authUser.password)
-// console.log(bcrypt.hash(authUser.password,salt))
+Userdb.findOne({name: req.body.name}).then(user=>{
+    if (user){
 
-// authUser.save().then((doc) =>res.status(201).send(doc));
-
-
-    // new user
-    const user = new authUserdb({
-        name : req.body.name,
-        password : req.body.password
-    })
-
-    // save user in the database
-    user
-        .save(user)
-        .then(data => {
-            //res.send(data)
-            res.redirect('/add-user');
-        })
-        .catch(err =>{
-            res.status(500).send({
-                message : err.message || "Some error occurred while creating a create operation"
-            });
+        bcrypt.compare(req.body.password, hash, function(err, res) {
+            if (res){
+                res.redirect('/');
+            }else{
+                res.status(500).send({
+                    message :  "your password is wrong mate"
+                });
+            }
         });
+    
+    }else {
+        
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(req.body.password, salt, function(err, hash) {
+            // Store hash in your password DB.
+    
+            console.log(hash)
+    
+             // new user
+        const user = new authUserdb({
+            name : req.body.name,
+            password : hash
+        })
+    
+        // save user in the database
+     user
+     .save(user)
+     .then(data => {
+         //res.send(data)
+         res.redirect('/add-user');
+     })
+     .catch(err =>{
+         res.status(500).send({
+             message : err.message || "Some error occurred while creating a create operation"
+         });
+     });
+    
+        });
+    
+     
+    
+    });
+    }
+})
 
-    // res.status(500).send({
-    //                 message :  "ok you are sending a response"
-    //             });
-console.log(req.body);
 }
+
