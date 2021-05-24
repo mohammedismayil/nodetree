@@ -17,9 +17,14 @@ app.use(morgan('tiny'));
 // mongodb connection
 connectDB();
 
-// parse request to body-parser
-app.use(bodyparser.urlencoded({ extended : true}))
+// // parse request to body-parser
+// app.use(bodyparser.urlencoded({ extended : false}))
+// app.use(bodyparser.json())
 
+
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 // set view engine
 app.set("view engine", "ejs")
 //app.set("views", path.resolve(__dirname, "views/ejs"))

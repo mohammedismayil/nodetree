@@ -117,42 +117,41 @@ exports.authUserCreate =  (req,res)=>{
     }
 
 
-    const authUser = new authUserdb();
-const salt =   bcrypt.genSalt(10);
+    // const authUser = new authUserdb();
+// const salt =   bcrypt.genSalt(10);
 
-console.log(authUser.password)
-console.log(bcrypt.hash(authUser.password,salt))
-authUser.name = req.body.name
-authUser.password =   bcrypt.hash(authUser.password,salt)
+console.log(req.body.name)
+console.log(req.body.password)
+// authUser.name = req.body.name
+// authUser.password =   bcrypt.hash(req.body.password,salt)
+
+// console.log(authUser.password)
+// console.log(bcrypt.hash(authUser.password,salt))
+
+// authUser.save().then((doc) =>res.status(201).send(doc));
 
 
+    // new user
+    const user = new authUserdb({
+        name : req.body.name,
+        password : req.body.password
+    })
 
-authUser.save().then((doc) =>res.status(201).send(doc));
+    // save user in the database
+    user
+        .save(user)
+        .then(data => {
+            //res.send(data)
+            res.redirect('/add-user');
+        })
+        .catch(err =>{
+            res.status(500).send({
+                message : err.message || "Some error occurred while creating a create operation"
+            });
+        });
 
-
-    // // new user
-    // const user = new Userdb({
-    //     name : req.body.name,
-    //     email : req.body.email,
-    //     gender: req.body.gender,
-    //     status : req.body.status
-    // })
-
-    // // save user in the database
-    // user
-    //     .save(user)
-    //     .then(data => {
-    //         //res.send(data)
-    //         res.redirect('/add-user');
-    //     })
-    //     .catch(err =>{
-    //         res.status(500).send({
-    //             message : err.message || "Some error occurred while creating a create operation"
-    //         });
-    //     });
-
-    res.status(500).send({
-                    message :  "ok you are sending a response"
-                });
+    // res.status(500).send({
+    //                 message :  "ok you are sending a response"
+    //             });
 console.log(req.body);
 }
