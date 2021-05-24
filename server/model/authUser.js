@@ -6,15 +6,10 @@ var schema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    email : {
-        type: String,
-        required: true,
-        unique: true
-    },
-    gender : String,
-    status : String
+   password: String
+    
 })
 
-const Userdb = mongoose.model('userdb', schema);
+const authUserdb = mongoose.model('authUserdb', schema);
 
-module.exports = Userdb;
+module.exports = authUserdb;

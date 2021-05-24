@@ -1,4 +1,7 @@
+const bcrypt = require('bcryptjs')
+
 var Userdb = require('../model/model');
+var authUserdb = require('../model/authUser')
 
 // create and save new user
 exports.create = (req,res)=>{
@@ -106,12 +109,26 @@ exports.delete = (req, res)=>{
 }
 
 
-exports.authUserCreate = (req,res)=>{
+exports.authUserCreate =  (req,res)=>{
     // validate request
     if(!req.body){
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
+
+
+    const authUser = new authUserdb();
+const salt =   bcrypt.genSalt(10);
+
+console.log(authUser.password)
+console.log(bcrypt.hash(authUser.password,salt))
+authUser.name = req.body.name
+authUser.password =   bcrypt.hash(authUser.password,salt)
+
+
+
+authUser.save().then((doc) =>res.status(201).send(doc));
+
 
     // // new user
     // const user = new Userdb({
