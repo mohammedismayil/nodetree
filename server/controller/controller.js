@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs')
-
+const jwt = require('jsonwebtoken');
 var Userdb = require('../model/model');
 var authUserdb = require('../model/authUser');
 const { json } = require('body-parser');
@@ -125,11 +125,12 @@ authUserdb.findOne({name: req.body.name}).then(user=>{
 
         bcrypt.compare(req.body.password, user.password, function(err, responseFrom) {
             if (responseFrom){
-                responseFrom.redirect('/');
+                // responseFrom.redirect('/');
+                res.json(user);
             }else{
                 // res.send({ message: "The username and password combination is correct!" });
-                // res.json({ message :  "your password is wrong mate"});
-                res.json(user);
+                res.json({ message :  "your password is wrong mate"});
+                // res.json(user);
                 // return res.json({success: false, message: 'passwords do not match'});
             }
         });
@@ -153,7 +154,12 @@ authUserdb.findOne({name: req.body.name}).then(user=>{
      .save(user)
      .then(data => {
          //res.send(data)
-         res.redirect('/add-user');
+        //  res.redirect('/add-user');
+
+
+  const token = generateAccessToken({ username: req.body.name });
+  res.json(token);
+        // res.json({"status":"user created successfully"})
      })
      .catch(err =>{
          res.status(500).send({
@@ -171,3 +177,14 @@ authUserdb.findOne({name: req.body.name}).then(user=>{
 
 }
 
+
+exports.getIn =  (req,res) => {
+console.log(res)
+
+}
+
+
+function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+  }
+  
