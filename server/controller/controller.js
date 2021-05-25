@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs')
 
 var Userdb = require('../model/model');
-var authUserdb = require('../model/authUser')
+var authUserdb = require('../model/authUser');
+const { json } = require('body-parser');
 
 // create and save new user
 exports.create = (req,res)=>{
@@ -119,16 +120,17 @@ exports.authUserCreate =  (req,res)=>{
 console.log(req.body.name)
 console.log(req.body.password)
 
-Userdb.findOne({name: req.body.name}).then(user=>{
+authUserdb.findOne({name: req.body.name}).then(user=>{
     if (user){
 
-        bcrypt.compare(req.body.password, hash, function(err, res) {
-            if (res){
-                res.redirect('/');
+        bcrypt.compare(req.body.password, user.password, function(err, responseFrom) {
+            if (responseFrom){
+                responseFrom.redirect('/');
             }else{
-                res.status(500).send({
-                    message :  "your password is wrong mate"
-                });
+                // res.send({ message: "The username and password combination is correct!" });
+                // res.json({ message :  "your password is wrong mate"});
+                res.json(user);
+                // return res.json({success: false, message: 'passwords do not match'});
             }
         });
     
