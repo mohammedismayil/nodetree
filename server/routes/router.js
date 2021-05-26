@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const services = require('../services/render');
 const controller = require('../controller/controller');
 const dotenv = require('dotenv');
+const { json } = require('body-parser');
 
 // get config vars
 dotenv.config( { path : 'config.env'} )
@@ -47,6 +48,7 @@ function authenticateToken(req, res, next) {
         if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
         
         res.status(200).send(decoded);
+        // res.status(200).send(json({"token":decoded}));
       });
   }
 module.exports = route

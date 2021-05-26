@@ -6,8 +6,8 @@ var schema = new mongoose.Schema({
         required: true,
         unique: true
     },
-   password: String
-    
+   password: String,
+    token:String
 })
 
 const authUserdb = mongoose.model('authUserdb', schema);

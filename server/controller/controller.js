@@ -143,10 +143,14 @@ authUserdb.findOne({name: req.body.name}).then(user=>{
     
             console.log(hash)
     
+            const token = generateAccessToken({ username: req.body.name });
+            // res.json(token);
+
              // new user
         const user = new authUserdb({
             name : req.body.name,
-            password : hash
+            password : hash,
+            token: token
         })
     
         // save user in the database
@@ -157,9 +161,11 @@ authUserdb.findOne({name: req.body.name}).then(user=>{
         //  res.redirect('/add-user');
 
 
-  const token = generateAccessToken({ username: req.body.name });
-  res.json(token);
+//   const token = generateAccessToken({ username: req.body.name });
+//   res.json(token);
         // res.json({"status":"user created successfully"})
+
+          res.json(user);
      })
      .catch(err =>{
          res.status(500).send({
