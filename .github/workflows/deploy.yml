@@ -1,0 +1,13 @@
+
+name: Main
+on: [push]
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+
+    steps:
+
+         - name: 'Ponting'
+           uses: mohammedismayil/voilagithubaction_js@0.1.1
+
