@@ -1,13 +1,16 @@
-
-name: Main
 on: [push]
 
 jobs:
-  my_job:
+  hello_world_job:
     runs-on: ubuntu-latest
-
+    name: A job to say hello
     steps:
-
-         - name: 'Ponting'
-           uses: mohammedismayil/voilagithubaction_js@0.1.1
-
+      - name: Hello world action step
+        id: hello
+        uses: mohammedismayil/voilagithubaction_js@0.1.1
+        with:
+          name: 'Ponting'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        
